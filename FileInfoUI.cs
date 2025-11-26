@@ -22,7 +22,7 @@ var menu = new MenuBar(
             "_File",
             [
                 new MenuItem(
-                    "_Open",
+                    "_Get File Info",
                     string.Empty,
                     () =>
                     {
@@ -46,6 +46,71 @@ var menu = new MenuBar(
                                 "Ok"
                             );
                         }
+                    }
+                ),
+                // New "New Person" form menu item
+                new MenuItem(
+                    "_New Person (Dialog)",
+                    string.Empty,
+                    () =>
+                    {
+                        var form = new Dialog("New Person", 60, 13);
+
+                        var nameLbl = new Label(1, 1, "Name: ");
+                        var nameField = new TextField("") { X = 14, Y = 1, Width = 40 };
+
+                        var lastLbl = new Label(1, 3, "Last name: ");
+                        var lastField = new TextField("") { X = 14, Y = 3, Width = 40 };
+
+                        var ageLbl = new Label(1, 5, "Age (years): ");
+                        var ageField = new TextField("") { X = 14, Y = 5, Width = 8 };
+
+                        var saveBtn = new Button("Save") { X = Pos.Center() - 10, Y = 8 };
+                        var cancelBtn = new Button("Cancel") { X = Pos.Center() + 2, Y = 8 };
+
+                        saveBtn.Clicked += () =>
+                        {
+                            if (nameField.Text.ToString().Trim() is not { Length: >= 2 } name)
+                            {
+                                MessageBox.ErrorQuery("Validation", "Please enter a name greater or equal to 2 characters.", "Ok");
+                                return;
+                            }
+
+                            if (lastField.Text.ToString().Trim() is not { Length: >= 2 } lastname)
+                            {
+                                MessageBox.ErrorQuery("Validation", "Please enter a last name greater or equal to 2 characters.", "Ok");
+                                return;
+                            }
+
+                            if (
+                                ageField.Text.ToString().Trim() is not { Length: > 0 } ageText
+                                || !int.TryParse(ageText, out var age)
+                                || age <= 0
+                                || age > 120
+                            )
+                            {
+                                MessageBox.ErrorQuery(
+                                    "Validation",
+                                    "Age must be a number greater than 0 and less than or equal to 120.",
+                                    "Ok"
+                                );
+                                return;
+                            }
+
+                            MessageBox.Query(
+                                "Person Saved",
+                                $"Name: {name}\nLastname: {lastname}\nAge: {age}",
+                                "Ok"
+                            );
+
+                            Application.RequestStop(form);
+                        };
+
+                        cancelBtn.Clicked += () => Application.RequestStop(form);
+
+                        form.Add(nameLbl, nameField, lastLbl, lastField, ageLbl, ageField, saveBtn, cancelBtn);
+
+                        Application.Run(form);
                     }
                 ),
                 new MenuItem("_Exit", string.Empty, () => Application.RequestStop())
