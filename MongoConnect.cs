@@ -121,7 +121,7 @@ public class MongoConnect(string connectionString, string databaseName)
             var database = client.GetDatabase(_databaseName);
 
             AnsiConsole.MarkupLine(
-                "[green]Successfully connected to the MongoDB database![/]"
+                "[green]Successfully acquired connection details to the MongoDB database![/]"
             );
 
             return database;
@@ -129,7 +129,7 @@ public class MongoConnect(string connectionString, string databaseName)
         catch (Exception ex)
         {
             AnsiConsole.MarkupLine(
-                $"[red]Failed to connect to the MongoDB database..[/]"
+                $"[red]Failed to acquire connection details for the MongoDB database..[/]"
             );
             AnsiConsole.WriteException(ex);
             return null;
