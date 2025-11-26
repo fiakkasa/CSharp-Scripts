@@ -169,7 +169,7 @@ static void ShowNewEntryFormDialog()
         {
             MessageBox.ErrorQuery(
                 "Validation",
-                "Age must be a number greater than 0 and less than or equal to 120.",
+                "Age must be a whole number greater than 0 and less than or equal to 120.",
                 "Ok"
             );
             return;
